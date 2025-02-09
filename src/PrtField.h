@@ -26,13 +26,13 @@
 // Code developed by:
 //  S.Larsson and J. Generowicz.
 
-#include "globals.hh"
 #include "G4MagneticField.hh"
 #include "G4ios.hh"
+#include "globals.hh"
 
+#include <cmath>
 #include <fstream>
 #include <vector>
-#include <cmath>
 
 class PrtField : public G4MagneticField
 
@@ -51,7 +51,7 @@ class PrtField : public G4MagneticField
   double fZoffset;
   bool invertX, invertY, invertZ;
 
- public:
+public:
   PrtField(const char *filename, double zOffset);
   void GetFieldValue(const double Point[4], double *Bfield) const;
 };

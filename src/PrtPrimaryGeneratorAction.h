@@ -7,8 +7,8 @@
 #ifndef PrtPrimaryGeneratorAction_h
 #define PrtPrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 
 #include "PrtRun.h"
@@ -19,17 +19,17 @@ class G4Event;
 class PrtPrimaryGeneratorMessenger;
 
 class PrtPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
- public:
+public:
   PrtPrimaryGeneratorAction();
   virtual ~PrtPrimaryGeneratorAction();
 
- public:
+public:
   virtual void GeneratePrimaries(G4Event *);
 
   void SetOptPhotonPolar();
   void SetOptPhotonPolar(G4double);
 
- private:
+private:
   PrtRun *fRun;
   int fRunType, fGeomType, fPid, fPdg, fField, iter;
   double fRadiatorL, fRadiatorW, fRadiatorH;

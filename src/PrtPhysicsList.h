@@ -1,10 +1,9 @@
 #ifndef PrtPhysicsList_h
 #define PrtPhysicsList_h
 
-#include "globals.hh"
-#include "G4VUserPhysicsList.hh"
 #include "G4FastSimulationPhysics.hh"
-
+#include "G4VUserPhysicsList.hh"
+#include "globals.hh"
 
 class G4Cerenkov;
 class PrtCherenkovProcess;
@@ -17,11 +16,11 @@ class G4OpBoundaryProcess;
 class PrtPhysicsListMessenger;
 
 class PrtPhysicsList : public G4VUserPhysicsList {
- public:
+public:
   PrtPhysicsList();
   virtual ~PrtPhysicsList();
 
- public:
+public:
   virtual void ConstructParticle();
   virtual void ConstructProcess();
 
@@ -38,7 +37,7 @@ class PrtPhysicsList : public G4VUserPhysicsList {
   void SetVerbose(G4int);
   void SetNbOfPhotonsCerenkov(G4int);
 
- private:
+private:
   int fRunType, fPhysList;
   G4Cerenkov *fCerenkovProcess;
   PrtCherenkovProcess *fCerenkovProcess0;
@@ -49,7 +48,6 @@ class PrtPhysicsList : public G4VUserPhysicsList {
   G4OpBoundaryProcess *fBoundaryProcess;
 
   PrtPhysicsListMessenger *fMessenger;
-  
 };
 
 #endif

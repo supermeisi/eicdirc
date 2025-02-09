@@ -7,14 +7,14 @@
 #ifndef PrtRun_h
 #define PrtRun_h 1
 
-#include <iostream>
 #include "TObject.h"
 #include "TString.h"
 #include "TVector3.h"
+#include <iostream>
 
 class PrtRun : public TObject {
 
- public:
+public:
   PrtRun();
   ~PrtRun(){};
 
@@ -46,7 +46,7 @@ class PrtRun : public TObject {
   Double_t getBeamX() const { return fBeamX; }
   Double_t getBeamZ() const { return fBeamZ; }
   Double_t getBeamSize() const { return fBeamSize; }
-  Double_t getTrackingResTheta() const { return fTrackingResTheta; }     	
+  Double_t getTrackingResTheta() const { return fTrackingResTheta; }
   Double_t getTrackingResPhi() const { return fTrackingResPhi; }
   Double_t getTimeSigma() const { return fTimeSigma; }
   Double_t getTimeCut() const { return fTimeCut; }
@@ -79,7 +79,7 @@ class PrtRun : public TObject {
   void setLens(Int_t v) { fLens = v; }
   void setTrigger(Int_t v) { fTrigger = v; }
   void setNpmt(Int_t v) { fNpmt = v; }
-  void setNpix(Int_t v) { fNpix = v; }  
+  void setNpix(Int_t v) { fNpix = v; }
   void setCorrection(Int_t v) { fCorrection = v; }
   void setPrismStepX(Double_t v) { fPrismStepX = v; }
   void setPrismStepY(Double_t v) { fPrismStepY = v; }
@@ -99,7 +99,7 @@ class PrtRun : public TObject {
   void setTest2(Double_t v) { fTest2 = v; }
   void setTest3(Double_t v) { fTest3 = v; }
 
- private:
+private:
   TString fShortInfo;
   TString fName;
   Int_t fId;
@@ -136,7 +136,7 @@ class PrtRun : public TObject {
 
   Double_t fRadiatorL, fRadiatorW, fRadiatorH;
   Double_t fDarkNoise;
-  
+
   Double_t fTest1;
   Double_t fTest2;
   Double_t fTest3;

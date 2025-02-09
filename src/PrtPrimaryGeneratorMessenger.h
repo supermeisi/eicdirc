@@ -10,18 +10,17 @@ class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrtPrimaryGeneratorMessenger: public G4UImessenger
-{
-  public:
-    PrtPrimaryGeneratorMessenger(PrtPrimaryGeneratorAction* );
-    virtual ~PrtPrimaryGeneratorMessenger();
- 
-    virtual void SetNewValue(G4UIcommand*, G4String);
- 
-  private:
-    PrtPrimaryGeneratorAction* fPrtAction;
-    G4UIdirectory*                  fGunDir;
-    G4UIcmdWithADoubleAndUnit*      fPolarCmd;
+class PrtPrimaryGeneratorMessenger : public G4UImessenger {
+public:
+  PrtPrimaryGeneratorMessenger(PrtPrimaryGeneratorAction *);
+  virtual ~PrtPrimaryGeneratorMessenger();
+
+  virtual void SetNewValue(G4UIcommand *, G4String);
+
+private:
+  PrtPrimaryGeneratorAction *fPrtAction;
+  G4UIdirectory *fGunDir;
+  G4UIcmdWithADoubleAndUnit *fPolarCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

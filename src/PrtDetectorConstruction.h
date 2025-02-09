@@ -1,26 +1,25 @@
 #ifndef PrtDetectorConstruction_h
 #define PrtDetectorConstruction_h 1
 
-#include "globals.hh"
 #include "G4Material.hh"
-#include "G4VUserDetectorConstruction.hh"
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
-
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
 #include "TChain.h"
 
-#include "PrtRun.h"
 #include "PrtDetectorConstructionMessenger.h"
+#include "PrtRun.h"
 
 class PrtDetectorConstructionMessenger;
 
 class PrtDetectorConstruction : public G4VUserDetectorConstruction {
- public:
-  PrtDetectorConstruction();
+public:
+  PrtDetectorConstruction(G4double fRotationZ);
   virtual ~PrtDetectorConstruction();
 
- public:
+public:
   virtual G4VPhysicalVolume *Construct();
   virtual void ConstructSDandField();
   void DefineMaterials();
@@ -30,7 +29,7 @@ class PrtDetectorConstruction : public G4VUserDetectorConstruction {
   void SetLens(G4int id);
   void SetQuantumEfficiency(G4int id);
 
- private:
+private:
   PrtRun *fRun;
 
   G4LogicalVolume *lExpHall;
@@ -103,6 +102,7 @@ class PrtDetectorConstruction : public G4VUserDetectorConstruction {
   double fRotAngle;
   double *fQuantumEfficiency;
   int fRunType, fStudy, fTest1, fTest2, fTest3;
+  double fRotationZ;
 
   G4ThreeVector fPrismShift;
 

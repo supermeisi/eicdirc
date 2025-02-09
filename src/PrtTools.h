@@ -4,69 +4,70 @@
 #ifndef prttools_h
 #define prttools_h 1
 
-#include "TROOT.h"
-#include "TSystem.h"
-#include "TStyle.h"
-#include "TCanvas.h"
-#include "TPad.h"
-#include "TH1.h"
-#include "TH2.h"
-#include "TGraph.h"
-#include "TMultiGraph.h"
-#include "TSpline.h"
-#include "TF1.h"
-#include "TFile.h"
-#include "TTree.h"
-#include "TClonesArray.h"
-#include "TVector3.h"
-#include "TMath.h"
-#include "TChain.h"
-#include "TGaxis.h"
-#include "TColor.h"
-#include "TString.h"
-#include "TArrayD.h"
-#include "TSpectrum.h"
-#include "TSpectrum2.h"
-#include "Math/Minimizer.h"
 #include "Math/Factory.h"
 #include "Math/Functor.h"
-#include "TRandom2.h"
-#include "TError.h"
-#include "TPaveStats.h"
-#include "TObjString.h"
+#include "Math/Minimizer.h"
 #include "TApplication.h"
-#include <TLegend.h>
+#include "TArrayD.h"
+#include "TCanvas.h"
+#include "TChain.h"
+#include "TClonesArray.h"
+#include "TColor.h"
+#include "TCut.h"
+#include "TError.h"
+#include "TEventList.h"
+#include "TF1.h"
+#include "TFile.h"
+#include "TFitResult.h"
+#include "TGaxis.h"
+#include "TGraph.h"
+#include "TGraphAsymmErrors.h"
+#include "TH1.h"
+#include "TH2.h"
+#include "TMath.h"
+#include "TMultiGraph.h"
+#include "TObjString.h"
+#include "TPRegexp.h"
+#include "TPad.h"
+#include "TPaveStats.h"
+#include "TROOT.h"
+#include "TRandom2.h"
+#include "TSpectrum.h"
+#include "TSpectrum2.h"
+#include "TSpline.h"
+#include "TString.h"
+#include "TStyle.h"
+#include "TSystem.h"
+#include "TTree.h"
+#include "TVector3.h"
 #include <TAxis.h>
-#include <TPaletteAxis.h>
-#include <TRandom.h>
 #include <TCutG.h>
 #include <TKey.h>
-#include "TPRegexp.h"
-#include "TFitResult.h"
-#include "TGraphAsymmErrors.h"
-#include "TEventList.h"
-#include "TCut.h"
+#include <TLegend.h>
+#include <TPaletteAxis.h>
+#include <TRandom.h>
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 
-#include "PrtHit.h"
 #include "PrtEvent.h"
+#include "PrtHit.h"
 #include "PrtRun.h"
 
 using std::array;
 
 class PrtTools {
 
- public:
+public:
   PrtTools();
   PrtTools(TString in);
   PrtTools(PrtRun *run);
   ~PrtTools() {}
   void init();
 
-  bool init_run(TString in = "", int bdigi = 0, TString savepath = "", int setupid = 2019);
+  bool init_run(TString in = "", int bdigi = 0, TString savepath = "",
+                int setupid = 2019);
   void init_digi();
   TCanvas *draw_digi(double maxz = 0, double minz = 0, TCanvas *cdigi = NULL);
   TString pix_digi(TString header = "m,p,v\n");
@@ -83,7 +84,7 @@ class PrtTools {
   PrtRun *find_run(int sid, int fid = 0);
   PrtRun *find_run(TString path);
   void fill_digi(int pmt, int pix, double w = 1);
-  
+
   void set_palette(int p = 1);
   void set_pmtlayout(int v) { _pmtlayout = v; }
   void create_maps(int setupid = 2019);
@@ -95,12 +96,13 @@ class PrtTools {
   int get_channel(int tdc, int tdcch);
   int get_tdcid(int ch);
   TString rand_str(int len = 10);
-  TVector3 fit(TH1 *h, double range = 3, double threshold = 20, double limit = 2,
-               int peakSearch = 1, int bkg = 0, TString opt = "MQ");
-  TGraph *fit_slices(TH2F *h, double minrange = 0, double maxrange = 0, double fitrange = 1,
-                     int rebin = 1, int ret = 0);
-  TGraph *fit_slices_x(TH2F *h, double minrange = 0, double maxrange = 0, double fitrange = 1,
-		       int rebin = 1, int ret = 0);  
+  TVector3 fit(TH1 *h, double range = 3, double threshold = 20,
+               double limit = 2, int peakSearch = 1, int bkg = 0,
+               TString opt = "MQ");
+  TGraph *fit_slices(TH2F *h, double minrange = 0, double maxrange = 0,
+                     double fitrange = 1, int rebin = 1, int ret = 0);
+  TGraph *fit_slices_x(TH2F *h, double minrange = 0, double maxrange = 0,
+                       double fitrange = 1, int rebin = 1, int ret = 0);
   void style_graph(TGraph *g, int id);
   double integral(TH1F *h, double xmin, double xmax);
   void normalize(TH1F *h1, TH1F *h2);
@@ -109,23 +111,27 @@ class PrtTools {
   TGraph *smooth(TGraph *g, int smoothness = 1);
   int shift_hist(TH1 *hist, double double_shift);
   double calculate_efficiency(TH1F *h1, TH1F *h2);
-  
+
   TString dir(TString path);
   TString create_dir(TString inpath = "");
   void write_info(TString filename);
   void write_string(TString filename, TString str);
-  
+
   void set_style();
   void set_style(TCanvas *c);
-  void save(TPad *c= NULL,TString path="", int what=0, int style=0);
+  void save(TPad *c = NULL, TString path = "", int what = 0, int style = 0);
 
-  double theta_to_eta(double t) { return -TMath::Log((tan(0.5 * TMath::DegToRad() * t))); }
-  double eta_to_theta(double eta) { return  2.0*atan(exp(-eta))*TMath::RadToDeg(); }
+  double theta_to_eta(double t) {
+    return -TMath::Log((tan(0.5 * TMath::DegToRad() * t)));
+  }
+  double eta_to_theta(double eta) {
+    return 2.0 * atan(exp(-eta)) * TMath::RadToDeg();
+  }
 
-  void add_canvas(TString name="c",int w=800, int h=400);
+  void add_canvas(TString name = "c", int w = 800, int h = 400);
   void add_canvas(TCanvas *c);
-  TCanvas *get_canvas(TString name="c");
-  void del_canvas(TString name="c");
+  TCanvas *get_canvas(TString name = "c");
+  void del_canvas(TString name = "c");
 
   // style = 0 - for web blog
   // style = 1 - for talk
@@ -133,26 +139,27 @@ class PrtTools {
   // what = 1 - save in png, C
   // what = 2 - save in png, C, pdf
   // what = 3 - save in png, C, pdf, eps
-  void save_canvas(int what=1, int style=0, bool rm=false);
-  void save_canvas(TString path, int what=1, int style=0, bool rm=false);
-  void print_canvas(TPad *c, TString name = "", TString path = "", int what = 0);
+  void save_canvas(int what = 1, int style = 0, bool rm = false);
+  void save_canvas(TString path, int what = 1, int style = 0, bool rm = false);
+  void print_canvas(TPad *c, TString name = "", TString path = "",
+                    int what = 0);
 
-  void wait_primitive(TString name, TString prim="");
-  
+  void wait_primitive(TString name, TString prim = "");
+
   // accessors
   PrtEvent *event() const { return _event; }
   PrtRun *run() { return _run; }
   TChain *chain() { return _chain; }
   int pdg(int v) { return _pdg[v]; }
   int pid() { return _pid; }
-  int i( ) { return _iter; }
-  int entries(){ return _entries;}
+  int i() { return _iter; }
+  int entries() { return _entries; }
   double mass(int v) { return _mass[v]; }
   int color(int v) { return _color[v]; }
   TString name(int v) { return _name[v]; }
   TString lname(int v) { return _lname[v]; }
-  int maxdircch(){ return _maxdircch;}
-  TH2F *get_digi(int v){ return _hdigi[v];}
+  int maxdircch() { return _maxdircch; }
+  TH2F *get_digi(int v) { return _hdigi[v]; }
 
   // mutators
   void set_path(TString v) { _savepath = v; }
@@ -160,7 +167,7 @@ class PrtTools {
   array<int, 100000> map_pmt{}, map_pix{}, map_row{}, map_col{}, map_tdc{};
   array<array<int, 10000>, 24> map_pmtpix{};
 
- private:
+private:
   TChain *_chain;
   PrtEvent *_event;
   TString _dbpath, _savepath;
@@ -172,16 +179,18 @@ class PrtTools {
   array<int, 5> _color = {kOrange + 6, kCyan + 1, kBlue + 1, kRed + 1, kBlack};
 
   array<TString, 32> _tdcsid_jul2018 = {
-    "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "200a",
-    "200b", "200c", "200d", "200e", "200f", "2010", "2011", "2012", "2013", "2014", "2015",
-    "2016", "2017", "2018", "2019", "201a", "201b", "201c", "201d", "201e", "201f"};
+      "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007",
+      "2008", "2009", "200a", "200b", "200c", "200d", "200e", "200f",
+      "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017",
+      "2018", "2019", "201a", "201b", "201c", "201d", "201e", "201f"};
 
-  array<TString, 21> _tdcsid_jul2019 = {"2014", "2015", "2016", "2017", "2000", "2001", "2002",
-                                        "2003", "2004", "2005", "2006", "2007", "2008", "2009",
-                                        "200a", "200b", "200c", "200d", "200e", "200f", "2010"};
+  array<TString, 21> _tdcsid_jul2019 = {
+      "2014", "2015", "2016", "2017", "2000", "2001", "2002",
+      "2003", "2004", "2005", "2006", "2007", "2008", "2009",
+      "200a", "200b", "200c", "200d", "200e", "200f", "2010"};
 
   std::vector<PrtRun *> _runs;
-  PrtRun* _run;
+  PrtRun *_run;
   array<TH2F *, 28> _hdigi{};
   int _entries;
   int _iter = -1;
@@ -197,6 +206,4 @@ class PrtTools {
   TList *_canvaslist;
 };
 
-
 #endif
-

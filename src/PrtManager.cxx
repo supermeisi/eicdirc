@@ -1,5 +1,5 @@
-#include "TInterpreter.h"
 #include "G4SystemOfUnits.hh"
+#include "TInterpreter.h"
 
 #include "PrtManager.h"
 
@@ -11,12 +11,12 @@ PrtManager::PrtManager(TString filename, PrtRun *run) {
   fRun = run;
   fRunType = fRun->getRunType();
   fEvent = new PrtEvent();
-  
-  if (fRunType < 2 || fRunType == 5){
+
+  if (fRunType < 2 || fRunType == 5) {
     fRootFile = new TFile(filename, "RECREATE");
     fRun->setMc(true);
   }
-  
+
   fRunTree = new TTree("header", "run info");
   fRunTree->Branch("PrtRun", "PrtRun", &fRun, 64000, 2);
 
@@ -40,7 +40,8 @@ PrtManager *PrtManager::Instance(TString outfile, PrtRun *run) {
 void PrtManager::initializeLut() {
   if (fRunType == 1 || fRunType == 7 || fRunType == 11) {
     fLut = new TClonesArray("PrtLutNode");
-    fTree = new TTree("prtlut", "Look-up table for the geometrical reconstruction.");
+    fTree = new TTree("prtlut",
+                      "Look-up table for the geometrical reconstruction.");
     fTree->Branch("LUT", &fLut, 256000, 2);
     TClonesArray &fLuta = *fLut;
 
@@ -56,21 +57,21 @@ void PrtManager::addEvent(PrtEvent event) {
   }
 }
 
-void PrtManager::addHit(PrtHit hit) {
-  fEvent->addHit(hit);
-}
+void PrtManager::addHit(PrtHit hit) { fEvent->addHit(hit); }
 
 void PrtManager::addHit(PrtHit hit, TVector3 localpos, TVector3 vertex) {
   if (fRunType == 0 || fRunType == 5 || fRunType == 6) {
     fEvent->addHit(hit);
   } else if (fRunType == 1 || fRunType == 7 || fRunType == 11) {
-    if (fMomentum.Angle(fnX1) > fCriticalAngle && fMomentum.Angle(fnY1) > fCriticalAngle) {
+    if (fMomentum.Angle(fnX1) > fCriticalAngle &&
+        fMomentum.Angle(fnY1) > fCriticalAngle) {
       int ch = hit.getChannel();
       double time = hit.getLeadTime();
       // if (fRunType == 11) time -= fTime;
-      
+
       ((PrtLutNode *)(fLut->At(ch)))
-        ->AddEntry(ch, fMomentum, hit.getPathInPrizm(), 0, time, localpos, vertex);
+          ->AddEntry(ch, fMomentum, hit.getPathInPrizm(), 0, time, localpos,
+                     vertex);
     }
   }
 }
@@ -82,7 +83,7 @@ void PrtManager::fill() {
   }
 }
 
-void PrtManager::save(){
+void PrtManager::save() {
   if (fRootFile) {
     fRunTree->Fill();
     fRootFile->Write();
@@ -90,5 +91,6 @@ void PrtManager::save(){
 }
 
 void PrtManager::fillLut() {
-  if (fRunType == 1 || fRunType == 7 || fRunType == 11) fTree->Fill();
+  if (fRunType == 1 || fRunType == 7 || fRunType == 11)
+    fTree->Fill();
 }

@@ -9,21 +9,21 @@
 #ifndef PrtLutReco_h
 #define PrtLutReco_h 1
 
-#include "TString.h"
-#include "TFile.h"
+#include "TArc.h"
 #include "TChain.h"
+#include "TF1.h"
+#include "TFile.h"
 #include "TH1.h"
 #include "TH2.h"
-#include "TF1.h"
 #include "TSpectrum.h"
-#include "TArc.h"
+#include "TString.h"
 #include "TVirtualFitter.h"
 
-#include "PrtRun.h"
 #include "PrtEvent.h"
 #include "PrtHit.h"
-#include "PrtManager.h"
 #include "PrtLutNode.h"
+#include "PrtManager.h"
+#include "PrtRun.h"
 #include "PrtTools.h"
 
 #ifdef AI
@@ -32,16 +32,17 @@
 
 class PrtLutReco {
 
- public:
+public:
   // Standard constructors
-  PrtLutReco(TString infile, TString lutfile, TString pdffile, TString nnfile, int verbose = 0);
+  PrtLutReco(TString infile, TString lutfile, TString pdffile, TString nnfile,
+             int verbose = 0);
 
   // Destructor
   ~PrtLutReco();
   void Run(int start = 0, int end = 0);
   void drawTheoryLines(double mom = 6);
 
- private:
+private:
   void FindPeak(double (&cherenkovreco)[5], double (&spr)[5]);
   int FindPdg(double mom, double cangle);
   void FitRing(double &x0, double &y0, double &theta);
@@ -91,8 +92,8 @@ class PrtLutReco {
   TString fCorrPath;
   TString fPdfPath;
   TString fNNPath;
-  
-  TF1 *fFit, *fChromCor;  
+
+  TF1 *fFit, *fChromCor;
   TSpectrum *fSpect;
   double fSigma[5];
   TH1F *hthetac[5];
@@ -105,17 +106,17 @@ class PrtLutReco {
   TH1F *fLnDiffNn[5];
   double fCriticalAngle;
   TString fCorrFile;
-  TH1F *fTime[5][99000]; //7000
+  TH1F *fTime[5][99000]; // 7000
   // std::vector<std::vector<TH1F*>> fTime;//(5, std::vector<TH1F*>(99000));
   TGraph *fPdf[5][99000];
   TH1F *fPmt_a[28], *fPmt_td[28], *fPmt_tr[28], *fFindTimeA[20], *fHistDiff[3];
-  TH1F *fHist1, *fHist2, *fTrackAngle0, *fTrackAngle1, *fTrackAngle2, *fFindTime, *fFindTimeRes;
+  TH1F *fHist1, *fHist2, *fTrackAngle0, *fTrackAngle1, *fTrackAngle2,
+      *fFindTime, *fFindTimeRes;
   TH2F *fDiff, *fHist4, *fHist5, *fdtt, *fdtl, *fdtp, *fhChromL;
-  
+
 #ifdef AI
   cppflow::model *fNNmodel;
 #endif
-  
 };
 
 #endif

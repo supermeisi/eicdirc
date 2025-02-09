@@ -1,15 +1,16 @@
 #include "PrtDetectorConstructionMessenger.h"
 #include "PrtPrimaryGeneratorAction.h"
 
-#include "G4UIdirectory.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4UIdirectory.hh"
 
 #include "PrtManager.h"
 
-PrtDetectorConstructionMessenger::PrtDetectorConstructionMessenger(PrtDetectorConstruction *PrtGeom)
-  : G4UImessenger(), fPrtGeom(PrtGeom) {
+PrtDetectorConstructionMessenger::PrtDetectorConstructionMessenger(
+    PrtDetectorConstruction *PrtGeom)
+    : G4UImessenger(), fPrtGeom(PrtGeom) {
   fGeomDir = new G4UIdirectory("/Prt/geom/");
   fGeomDir->SetGuidance("Geometry control");
 
@@ -44,7 +45,8 @@ PrtDetectorConstructionMessenger::~PrtDetectorConstructionMessenger() {
   delete fGeomDir;
 }
 
-void PrtDetectorConstructionMessenger::SetNewValue(G4UIcommand *command, G4String newValue) {
+void PrtDetectorConstructionMessenger::SetNewValue(G4UIcommand *command,
+                                                   G4String newValue) {
   if (command == fDrawHits) {
     G4int id = fDrawHits->GetNewIntValue(newValue);
     fPrtGeom->DrawHitBox(id);

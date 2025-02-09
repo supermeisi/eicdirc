@@ -7,14 +7,14 @@
 /// Stepping action class
 
 class PrtSteppingAction : public G4UserSteppingAction {
- public:
+public:
   PrtSteppingAction();
   virtual ~PrtSteppingAction();
 
   // method from the base class
   virtual void UserSteppingAction(const G4Step *);
 
- private:
+private:
   G4int fScintillationCounter;
   G4int fCerenkovCounter;
   G4int fEventNumber;

@@ -10,12 +10,12 @@
 #include "TObject.h"
 #include "TString.h"
 
-#include <vector>
 #include "PrtHit.h"
+#include <vector>
 
 class PrtEvent : public TObject {
 
- public:
+public:
   PrtEvent();
   ~PrtEvent(){};
 
@@ -46,7 +46,7 @@ class PrtEvent : public TObject {
   void setPosition(TVector3 v) { fPosition = v; }
   void setPositionAfter(TVector3 v) { fPositionAfter = v; }
 
- private:
+private:
   Int_t fPid;
   Double_t fTime;
   Double_t fTof;

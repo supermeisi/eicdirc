@@ -26,15 +26,15 @@
 // Code developed by:
 //  S.Larsson and J. Generowicz.
 
-#include "G4SystemOfUnits.hh"
 #include "G4AutoLock.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "TVector2.h"
 #include "TVector3.h"
 
+#include "PrtField.h"
 #include "PrtManager.h"
 #include "PrtRun.h"
-#include "PrtField.h"
 
 namespace {
 G4Mutex myPrtFieldLock = G4MUTEX_INITIALIZER;
@@ -43,29 +43,31 @@ G4Mutex myPrtFieldLock = G4MUTEX_INITIALIZER;
 using namespace std;
 
 PrtField::PrtField(const char *filename, double zOffset)
-  : fZoffset(zOffset), invertX(false), invertY(false), invertZ(false) {
+    : fZoffset(zOffset), invertX(false), invertY(false), invertZ(false) {
 
   double lenUnit;
   double fieldUnit;
 
-  //G4cout << "\n-----------------------------------------------------------"
-  //       << "\n      Magnetic field"
-  //       << "\n-----------------------------------------------------------";
-	G4cout<<"PrtField::PrtField -- Reading field map: "<<filename<<G4endl;
-	auto fRun	= PrtManager::Instance()->getRun();
-	int kField	= fRun->getField();
-	if (kField<1 || kField>3){
-		G4cout<<"PrtField::PrtField -- Do not understand field parameter! \t field = "<<kField<<G4endl;
-		exit(0);
-	} else {
-		if (kField==1){		// default field.tab is in units of Gauss
-			lenUnit		= cm;
-			fieldUnit	= gauss;
-		} else if (kField==2||kField==3){
-			lenUnit		= cm;
-			fieldUnit	= tesla;
-		}
-	}
+  // G4cout << "\n-----------------------------------------------------------"
+  //        << "\n      Magnetic field"
+  //        << "\n-----------------------------------------------------------";
+  G4cout << "PrtField::PrtField -- Reading field map: " << filename << G4endl;
+  auto fRun = PrtManager::Instance()->getRun();
+  int kField = fRun->getField();
+  if (kField < 1 || kField > 3) {
+    G4cout << "PrtField::PrtField -- Do not understand field parameter! \t "
+              "field = "
+           << kField << G4endl;
+    exit(0);
+  } else {
+    if (kField == 1) { // default field.tab is in units of Gauss
+      lenUnit = cm;
+      fieldUnit = gauss;
+    } else if (kField == 2 || kField == 3) {
+      lenUnit = cm;
+      fieldUnit = tesla;
+    }
+  }
 
   // This is a thread-local class and we have to avoid that all workers open the
   // file at the same time
@@ -81,8 +83,9 @@ PrtField::PrtField(const char *filename, double zOffset)
   char buffer[256];
 
   // Read table dimensions
-  file >> nz >> ny >> nx;		 // Note dodgy order
-  G4cout << "PrtField::PrtField -- Number of values x,y,z: "<<nx<<" "<<ny<<" "<<nz<<G4endl;
+  file >> nz >> ny >> nx; // Note dodgy order
+  G4cout << "PrtField::PrtField -- Number of values x,y,z: " << nx << " " << ny
+         << " " << nz << G4endl;
 
   // Set up storage space for table
   xField.resize(nx);
@@ -100,25 +103,29 @@ PrtField::PrtField(const char *filename, double zOffset)
     }
   }
 
-	//---- read in the dummy lines at top of field.tab
-	if (kField==1){
-	  // Ignore other header information
-	  // The first line whose second character is '0' is considered to
-	  // be the last line of the header.
-	  do {
-		file.getline(buffer, 256);
-	  } while (buffer[1] != '0');
-	}	// end kField==1
-	
+  //---- read in the dummy lines at top of field.tab
+  if (kField == 1) {
+    // Ignore other header information
+    // The first line whose second character is '0' is considered to
+    // be the last line of the header.
+    do {
+      file.getline(buffer, 256);
+    } while (buffer[1] != '0');
+  } // end kField==1
+
   // Read in the data
   double xval, yval, zval, bx, by, bz;
   for (iy = 0; iy < ny; iy++) {
     for (iz = 0; iz < nz; iz++) {
-      file >> xval >> yval >> zval >> bx >> by >> bz;		// xval always zero! bx BETTER always be zero!!
-      if (kField==1){
-	      if (fabs(bx) < 0.01) bx = 0;		// MISSES SIGN...
-	      if (fabs(by) < 0.01) by = 0;		// MISSES SIGN...
-	      if (fabs(bz) < 0.01) bz = 0;		// MISSES SIGN...
+      file >> xval >> yval >> zval >> bx >> by >>
+          bz; // xval always zero! bx BETTER always be zero!!
+      if (kField == 1) {
+        if (fabs(bx) < 0.01)
+          bx = 0; // MISSES SIGN...
+        if (fabs(by) < 0.01)
+          by = 0; // MISSES SIGN...
+        if (fabs(bz) < 0.01)
+          bz = 0; // MISSES SIGN...
       }
       if (iy == 0 && iz == 0) {
         minx = xval * lenUnit;
@@ -132,7 +139,7 @@ PrtField::PrtField(const char *filename, double zOffset)
   }
   file.close();
   lock.unlock();
-  G4cout<<"PrtField::PrtField -- done reading"<<G4endl;
+  G4cout << "PrtField::PrtField -- done reading" << G4endl;
 
   maxx = xval * lenUnit;
   maxy = yval * lenUnit;
@@ -140,11 +147,11 @@ PrtField::PrtField(const char *filename, double zOffset)
 
   // G4cout << " Read values of field from file " << filename << G4endl;
   G4cout << " ---> assumed the order:  x, y, z, Bx, By, Bz "
-         << "\n ---> Min values x,y,z: " << minx / cm << " " << miny / cm << " " << minz / cm
-         << " cm "
-         << "\n ---> Max values x,y,z: " << maxx / cm << " " << maxy / cm << " " << maxz / cm
-         << " cm "
-         << "\n ---> The field will be offset by " << zOffset / cm << " cm " << G4endl;
+         << "\n ---> Min values x,y,z: " << minx / cm << " " << miny / cm << " "
+         << minz / cm << " cm " << "\n ---> Max values x,y,z: " << maxx / cm
+         << " " << maxy / cm << " " << maxz / cm << " cm "
+         << "\n ---> The field will be offset by " << zOffset / cm << " cm "
+         << G4endl;
 
   // Should really check that the limits are not the wrong way around.
   if (maxx < minx) {
@@ -160,29 +167,29 @@ PrtField::PrtField(const char *filename, double zOffset)
     invertZ = true;
   }
   G4cout << "\nAfter reordering if neccesary"
-         << "\n ---> Min values x,y,z: " << minx / cm << " " << miny / cm << " " << minz / cm
-         << " cm "
-         << " \n ---> Max values x,y,z: " << maxx / cm << " " << maxy / cm << " " << maxz / cm
-         << " cm ";
+         << "\n ---> Min values x,y,z: " << minx / cm << " " << miny / cm << " "
+         << minz / cm << " cm " << " \n ---> Max values x,y,z: " << maxx / cm
+         << " " << maxy / cm << " " << maxz / cm << " cm ";
 
   dx = maxx - minx;
   dx = 1;
   dy = maxy - miny;
   dz = maxz - minz;
-  G4cout << "\n ---> Dif values x,y,z (range): " << dx / cm << " " << dy / cm << " " << dz / cm
-         << " cm in z "
-         << "\n-----------------------------------------------------------" << G4endl;
+  G4cout << "\n ---> Dif values x,y,z (range): " << dx / cm << " " << dy / cm
+         << " " << dz / cm << " cm in z "
+         << "\n-----------------------------------------------------------"
+         << G4endl;
 }
 
 //
-//	WJL	NOTE default map is only defined in the y-z plane, then 
+//	WJL	NOTE default map is only defined in the y-z plane, then
 //	WJL		a rotation about Z is used to get all other values
 //
 void PrtField::GetFieldValue(const double point[4], double *Bfield) const {
 
-  TVector2 t(point[0],point[1]);	// (x,y)
-  double z = point[2];				//  z
-  double r = t.Mod();				//  rho
+  TVector2 t(point[0], point[1]); // (x,y)
+  double z = point[2];            //  z
+  double r = t.Mod();             //  rho
 
   // Check that the point is within the defined region
   if (r >= miny && r <= maxy && z >= minz && z <= maxz) {
@@ -205,11 +212,10 @@ void PrtField::GetFieldValue(const double point[4], double *Bfield) const {
     int rindex = static_cast<int>(rdindex);
     int zindex = static_cast<int>(zdindex);
 
-    TVector3 vfield(xField[0][rindex][zindex], 
-                    yField[0][rindex][zindex],
+    TVector3 vfield(xField[0][rindex][zindex], yField[0][rindex][zindex],
                     zField[0][rindex][zindex]);
 
-    vfield.RotateZ(t.Phi()-TMath::PiOver2());
+    vfield.RotateZ(t.Phi() - TMath::PiOver2());
 
     Bfield[0] = vfield.X();
     Bfield[1] = vfield.Y();

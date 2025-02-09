@@ -38,16 +38,13 @@ class PrtSteppingVerbose;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrtSteppingVerbose : public G4SteppingVerbose
-{
- public:
+class PrtSteppingVerbose : public G4SteppingVerbose {
+public:
+  PrtSteppingVerbose();
+  virtual ~PrtSteppingVerbose();
 
-   PrtSteppingVerbose();
-   virtual ~PrtSteppingVerbose();
-
-   virtual void StepInfo();
-   virtual void TrackingStarted();
-
+  virtual void StepInfo();
+  virtual void TrackingStarted();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

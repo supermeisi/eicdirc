@@ -31,33 +31,29 @@
 #include "PrtActionInitialization.h"
 #include "PrtPrimaryGeneratorAction.h"
 #include "PrtRunAction.h"
-#include "PrtSteppingAction.h"
 #include "PrtStackingAction.h"
+#include "PrtSteppingAction.h"
 #include "PrtSteppingVerbose.h"
 #include "PrtTrackingAction.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrtActionInitialization::PrtActionInitialization()
-  : G4VUserActionInitialization(){
-}
+    : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrtActionInitialization::~PrtActionInitialization()
-{}
+PrtActionInitialization::~PrtActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrtActionInitialization::BuildForMaster() const
-{
+void PrtActionInitialization::BuildForMaster() const {
   SetUserAction(new PrtRunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrtActionInitialization::Build() const
-{
+void PrtActionInitialization::Build() const {
   SetUserAction(new PrtPrimaryGeneratorAction());
   SetUserAction(new PrtRunAction());
   SetUserAction(new PrtSteppingAction());
@@ -67,10 +63,8 @@ void PrtActionInitialization::Build() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VSteppingVerbose*
-PrtActionInitialization::InitializeSteppingVerbose() const
-{
+G4VSteppingVerbose *PrtActionInitialization::InitializeSteppingVerbose() const {
   return new PrtSteppingVerbose();
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,18 +1,18 @@
 #ifndef PrtOpBoundaryProcess_h
 #define PrtOpBoundaryProcess_h
 
-#include "globals.hh"
 #include "G4OpBoundaryProcess.hh"
+#include "globals.hh"
 
 class PrtOpBoundaryProcess : public G4OpBoundaryProcess {
- public:
+public:
   PrtOpBoundaryProcess();
   ~PrtOpBoundaryProcess(){};
 
- public:
+public:
   G4VParticleChange *PostStepDoIt(const G4Track &aTrack, const G4Step &aStep);
 
- private:
+private:
   int fLensId;
   int fRunType;
   int fEvType;

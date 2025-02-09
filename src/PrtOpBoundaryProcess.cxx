@@ -1,7 +1,7 @@
 #include "PrtOpBoundaryProcess.h"
 #include "G4TouchableHistory.hh"
-#include "PrtManager.h"
 #include "G4TransportationManager.hh"
+#include "PrtManager.h"
 
 PrtOpBoundaryProcess::PrtOpBoundaryProcess() : G4OpBoundaryProcess() {
   fLensId = PrtManager::Instance()->getRun()->getLens();
@@ -10,67 +10,78 @@ PrtOpBoundaryProcess::PrtOpBoundaryProcess() : G4OpBoundaryProcess() {
   fRadiatorL = PrtManager::Instance()->getRun()->getRadiatorL();
 }
 
-G4VParticleChange *PrtOpBoundaryProcess::PostStepDoIt(const G4Track &aTrack, const G4Step &aStep) {
+G4VParticleChange *PrtOpBoundaryProcess::PostStepDoIt(const G4Track &aTrack,
+                                                      const G4Step &aStep) {
   G4StepPoint *pPreStepPoint = aStep.GetPreStepPoint();
   G4StepPoint *pPostStepPoint = aStep.GetPostStepPoint();
-  G4VParticleChange *particleChange = G4OpBoundaryProcess::PostStepDoIt(aTrack, aStep);
+  G4VParticleChange *particleChange =
+      G4OpBoundaryProcess::PostStepDoIt(aTrack, aStep);
 
   // int parentId = aTrack.GetParentID();
   // std::cout<<"parentId   "<<parentId <<std::endl;
   // if(parentId==1) particleChange->ProposeTrackStatus(fStopAndKill);
 
   double endofbar = 0.5 * fRadiatorL;
- 
+
   // ideal focusing
   if (fLensId == 10 && fEvType != 3) {
     G4ThreeVector theGlobalPoint1 = pPostStepPoint->GetPosition();
-    G4TouchableHistory *touchable = (G4TouchableHistory *)(pPostStepPoint->GetTouchable());
-    G4ThreeVector lpoint = touchable->GetHistory()->GetTransform(1).TransformPoint(theGlobalPoint1);
+    G4TouchableHistory *touchable =
+        (G4TouchableHistory *)(pPostStepPoint->GetTouchable());
+    G4ThreeVector lpoint =
+        touchable->GetHistory()->GetTransform(1).TransformPoint(
+            theGlobalPoint1);
 
-    if (lpoint.getZ() < endofbar + 0.0001 && lpoint.getZ() > endofbar - 0.0001) {
+    if (lpoint.getZ() < endofbar + 0.0001 &&
+        lpoint.getZ() > endofbar - 0.0001) {
       G4ThreeVector ww = pPreStepPoint->GetTouchableHandle()
-                           ->GetHistory()
-                           ->GetTopTransform()
-                           .Inverse()
-                           .TransformPoint(G4ThreeVector(0, 0, endofbar));
+                             ->GetHistory()
+                             ->GetTopTransform()
+                             .Inverse()
+                             .TransformPoint(G4ThreeVector(0, 0, endofbar));
 
       // in global CS
       double newz = endofbar + 630 + 0.1; // lpoint.getZ()
 
       if (aStep.GetPreStepPoint()->GetPhysicalVolume()->GetName() != "wGlue")
         particleChange->ProposeTrackStatus(fStopAndKill);
-      else aParticleChange.ProposePosition(ww.getX(), ww.getY(), newz);
-      G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->ComputeSafety(
-        G4ThreeVector(ww.getX(), ww.getY(), newz));
+      else
+        aParticleChange.ProposePosition(ww.getX(), ww.getY(), newz);
+      G4TransportationManager::GetTransportationManager()
+          ->GetNavigatorForTracking()
+          ->ComputeSafety(G4ThreeVector(ww.getX(), ww.getY(), newz));
       return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
     }
   }
 
   // ideal focusing
   if (fLensId == 10 && fEvType == 3) {
-    endofbar =  1855.15;
+    endofbar = 1855.15;
     G4ThreeVector gpoint = pPostStepPoint->GetPosition();
-    G4TouchableHistory *touchable = (G4TouchableHistory *)(pPostStepPoint->GetTouchable());
-    G4ThreeVector lpoint = touchable->GetHistory()->GetTransform(1).TransformPoint(gpoint);
+    G4TouchableHistory *touchable =
+        (G4TouchableHistory *)(pPostStepPoint->GetTouchable());
+    G4ThreeVector lpoint =
+        touchable->GetHistory()->GetTransform(1).TransformPoint(gpoint);
 
     if (gpoint.getZ() < endofbar + 0.1 && gpoint.getZ() > endofbar - 10.1) {
 
       // if(fEvType == 3) endofbar = endofbar - evprismlengh;
       G4ThreeVector ww = pPreStepPoint->GetTouchableHandle()
-                           ->GetHistory()
-                           ->GetTopTransform()
-                           .Inverse()
-                           .TransformPoint(G4ThreeVector(0, 0, endofbar));
+                             ->GetHistory()
+                             ->GetTopTransform()
+                             .Inverse()
+                             .TransformPoint(G4ThreeVector(0, 0, endofbar));
 
       // in global CS
       endofbar = 1855.15;
       double newz = endofbar + 0.1; // lpoint.getZ()
       // if (aStep.GetPreStepPoint()->GetPhysicalVolume()->GetName() != "wGlue")
-        // particleChange->ProposeTrackStatus(fStopAndKill);
+      // particleChange->ProposeTrackStatus(fStopAndKill);
       // else
-      aParticleChange.ProposePosition(ww.getX(), ww.getY(),newz); 
-      G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->ComputeSafety(
-        G4ThreeVector(ww.getX(), ww.getY(), newz));
+      aParticleChange.ProposePosition(ww.getX(), ww.getY(), newz);
+      G4TransportationManager::GetTransportationManager()
+          ->GetNavigatorForTracking()
+          ->ComputeSafety(G4ThreeVector(ww.getX(), ww.getY(), newz));
 
       // //cyl lens
       // aParticleChange.ProposePosition(ww.getX(), lpoint.getY(), newz);
@@ -80,11 +91,13 @@ G4VParticleChange *PrtOpBoundaryProcess::PostStepDoIt(const G4Track &aTrack, con
     }
   }
 
-  if (fRunType == 1 && pPostStepPoint->GetPosition().z() < pPreStepPoint->GetPosition().z()) {
-    if (fEvType != 1) particleChange->ProposeTrackStatus(fStopAndKill);
+  if (fRunType == 1 &&
+      pPostStepPoint->GetPosition().z() < pPreStepPoint->GetPosition().z()) {
+    if (fEvType != 1)
+      particleChange->ProposeTrackStatus(fStopAndKill);
     if (pPreStepPoint->GetPosition().z() < endofbar)
       particleChange->ProposeTrackStatus(fStopAndKill);
-  }  
+  }
 
   if (aStep.GetPostStepPoint()->GetPhysicalVolume()->GetName() == "wExpVol" &&
       pPostStepPoint->GetPosition().z() < pPreStepPoint->GetPosition().z()) {
@@ -118,7 +131,8 @@ G4VParticleChange *PrtOpBoundaryProcess::PostStepDoIt(const G4Track &aTrack, con
   // if((aStep.GetPreStepPoint()->GetPhysicalVolume()->GetName()=="wLens3"
   //     &&  aStep.GetPostStepPoint()->GetPhysicalVolume()->GetName()=="wDirc")
   //    || (aStep.GetPreStepPoint()->GetPhysicalVolume()->GetName()=="wLens3"
-  // 	 &&  aStep.GetPostStepPoint()->GetPhysicalVolume()->GetName()=="wLens3")){
+  // 	 &&
+  // aStep.GetPostStepPoint()->GetPhysicalVolume()->GetName()=="wLens3")){
   //   particleChange->ProposeTrackStatus(fStopAndKill);
   // }
 

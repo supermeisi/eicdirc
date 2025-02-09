@@ -14,7 +14,7 @@
 
 class PrtHit : public TObject {
 
- public:
+public:
   PrtHit();
   ~PrtHit(){};
 
@@ -40,9 +40,9 @@ class PrtHit : public TObject {
   void setPosition(TVector3 val) { fPosition = val; }
   void setMomentum(TVector3 val) { fMomentum = val; }
 
- protected:
+protected:
   Int_t fChannel;
-  Int_t fPrism;  
+  Int_t fPrism;
   Int_t fPmt;
   Int_t fPixel;
   Double_t fLeadTime;
