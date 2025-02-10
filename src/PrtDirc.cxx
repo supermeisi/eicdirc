@@ -326,7 +326,7 @@ int main(int argc, char **argv) {
     if (ui->IsGUI())
       UImanager->ApplyCommand("/control/execute gui.mac");
     UImanager->ApplyCommand(Form("/run/beamOn %d", events));
-    //ui->SessionStart();
+    ui->SessionStart();
     delete ui;
   }
 
