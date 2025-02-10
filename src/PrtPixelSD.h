@@ -7,6 +7,7 @@
 #ifndef PrtPixelSD_h
 #define PrtPixelSD_h 1
 
+#include <array>
 #include <vector>
 
 #include "G4VSensitiveDetector.hh"

@@ -71,6 +71,7 @@ set(Prt_SCRIPTS
     icons.mac
     run.png
     vis.mac
+    misalign.sh
   )
 
 foreach(_script ${Prt_SCRIPTS})
