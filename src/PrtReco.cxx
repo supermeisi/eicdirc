@@ -71,6 +71,10 @@ PrtReco::PrtReco(TString infile, TString lutfile, TString pdffile,
     fp1 = 4;
   }
 
+  fResiduals =
+      new TH1F("residuals", ";residuals;entries [#]", 500, 0, 80);
+  fTimeDiff = new TH2F("timediff", ";measured time [ns];t_{meas}-t_{calc} [ns]",
+                       500, 0, 100, 150, -5, 5);
   fTimeProp =
       new TH1F("timeprop", ";measured time [ns];entries [#]", 1000, 0, 80);
   fTimeDiff = new TH2F("timediff", ";measured time [ns];t_{meas}-t_{calc} [ns]",
@@ -1460,6 +1464,9 @@ void PrtReco::geom_reco(PrtEvent *event, TVector3 mom, bool ringfit) {
         luttime = bartime + evtime;
         tdiff = hittime - luttime;
         tangle = mom.Angle(dir);
+
+        double residuals = (tangle - fAngle[pid]);
+        fResiduals->Fill(residuals);
 
         if (!ringfit) {
           fTimeProp->Fill(hittime);

@@ -111,7 +111,7 @@ private:
   TGraph *fPdf[5][99000];
   TH1F *fPmt_a[28], *fPmt_td[28], *fPmt_tr[28], *fFindTimeA[20], *fTimeDiffR[3];
   TH1F *fTimeProp, *fTrackAngle0, *fTrackAngle1, *fTrackAngle2, *fFindTime,
-      *fFindTimeRes;
+      *fFindTimeRes, *fResiduals;
   TH2F *fTimeDiff, *fChRing, *fdtt, *fdtl, *fdtp, *fhChromL;
 
 #ifdef AI

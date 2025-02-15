@@ -72,6 +72,8 @@ set(Prt_SCRIPTS
     run.png
     vis.mac
     misalign.sh
+    submit.sh
+    thisjob.sh
   )
 
 foreach(_script ${Prt_SCRIPTS})

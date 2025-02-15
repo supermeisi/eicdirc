@@ -8,7 +8,7 @@ function pwait()
 
 run() {
     i=$1
-    VAL=$(bc <<< "scale=3; $i*0.000")
+    VAL=$(bc <<< "scale=3; $i*0.0001")
     echo $VAL
     DATA="data_$i"
     mkdir $DATA
