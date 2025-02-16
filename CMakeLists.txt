@@ -73,7 +73,9 @@ set(Prt_SCRIPTS
     vis.mac
     misalign.sh
     submit.sh
-    thisjob.sh
+    rotz.sh
+    shiftx.sh
+    shifty.sh
   )
 
 foreach(_script ${Prt_SCRIPTS})

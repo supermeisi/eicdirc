@@ -39,7 +39,7 @@
 #include "PrtPixelSD.h"
 #include "PrtPrizmSD.h"
 
-PrtDetectorConstruction::PrtDetectorConstruction(G4double fRotationZ)
+PrtDetectorConstruction::PrtDetectorConstruction(G4double fRotationZ, G4double fMisalignX, G4double fMisalignY)
     : G4VUserDetectorConstruction() {
 
   fRun = PrtManager::Instance()->getRun();
@@ -55,6 +55,8 @@ PrtDetectorConstruction::PrtDetectorConstruction(G4double fRotationZ)
   fTest3 = fRun->getTest3();
 
   this->fRotationZ = fRotationZ;
+  this->fMisalignX = fMisalignX;
+  this->fMisalignY = fMisalignY;
 
   fNRow = 6;
   fNCol = 4;
@@ -299,11 +301,11 @@ G4VPhysicalVolume *PrtDetectorConstruction::Construct() {
     for (int j = 0; j < 4; j++) {
       double z =
           -0.5 * dirclength + 0.5 * fBar[2] + (fBar[2] + gluethickness) * j;
-      wBar = new G4PVPlacement(misalignmentRot, G4ThreeVector(rshift, 0, z),
+      wBar = new G4PVPlacement(misalignmentRot, G4ThreeVector(rshift + fMisalignX, fMisalignY, z),
                                lBar, "wBar", lDirc, false, 0);
       wGlue = new G4PVPlacement(
           misalignmentRot,
-          G4ThreeVector(rshift, 0, z + 0.5 * (fBar[2] + gluethickness)), lGlue,
+          G4ThreeVector(rshift + fMisalignX, fMisalignY, z + 0.5 * (fBar[2] + gluethickness)), lGlue,
           "wGlue", lDirc, false, 0);
     }
     wTracker =
@@ -347,11 +349,11 @@ G4VPhysicalVolume *PrtDetectorConstruction::Construct() {
       for (int j = 0; j < nparts; j++) {
         double z =
             -0.5 * dirclength + 0.5 * fBar[2] + (fBar[2] + gluethickness) * j;
-        new G4PVPlacement(misalignmentRot, G4ThreeVector(rshift, shifty, z),
+        new G4PVPlacement(misalignmentRot, G4ThreeVector(rshift + fMisalignX, shifty + fMisalignY, z),
                           lBar, "wBar", lDirc, false, id);
         wGlue = new G4PVPlacement(
             misalignmentRot,
-            G4ThreeVector(rshift, shifty, z + 0.5 * (fBar[2] + gluethickness)),
+            G4ThreeVector(rshift + fMisalignX, shifty + fMisalignY, z + 0.5 * (fBar[2] + gluethickness)),
             lGlue, "wGlue", lDirc, false, id);
         id++;
       }

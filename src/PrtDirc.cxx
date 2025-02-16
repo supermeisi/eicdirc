@@ -43,6 +43,8 @@ int main(int argc, char **argv) {
   long seed = 0;
 
   double rotateZ(0.);
+  double shiftX(0.);
+  double shiftY(0.);
 
   for (int i = 1; i < argc; i = i + 2) {
     if (G4String(argv[i]) == "-m")
@@ -123,6 +125,10 @@ int main(int argc, char **argv) {
       correction = atoi(argv[i + 1]);
     else if (G4String(argv[i]) == "-rotz")
       rotateZ = atof(argv[i + 1]);
+    else if (G4String(argv[i]) == "-shiftx")
+      shiftX = atof(argv[i + 1]);
+    else if (G4String(argv[i]) == "-shifty")
+      shiftY = atof(argv[i + 1]);
     else {
       G4cerr << "read README.md" << G4endl;
       return 1;
@@ -291,7 +297,7 @@ int main(int argc, char **argv) {
     runManager->SetUserInitialization(new PrtPhysicsList());
   }
 
-  runManager->SetUserInitialization(new PrtDetectorConstruction(rotateZ));
+  runManager->SetUserInitialization(new PrtDetectorConstruction(rotateZ, shiftX, shiftY));
   runManager->SetUserInitialization(new PrtActionInitialization());
   runManager->Initialize();
 

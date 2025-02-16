@@ -16,7 +16,7 @@ class PrtDetectorConstructionMessenger;
 
 class PrtDetectorConstruction : public G4VUserDetectorConstruction {
 public:
-  PrtDetectorConstruction(G4double fRotationZ);
+  PrtDetectorConstruction(G4double, G4double, G4double);
   virtual ~PrtDetectorConstruction();
 
 public:
@@ -103,6 +103,8 @@ private:
   double *fQuantumEfficiency;
   int fRunType, fStudy, fTest1, fTest2, fTest3;
   double fRotationZ;
+  double fMisalignX;
+  double fMisalignY;
 
   G4ThreeVector fPrismShift;
 
