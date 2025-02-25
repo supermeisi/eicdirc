@@ -76,6 +76,7 @@ set(Prt_SCRIPTS
     rotz.sh
     shiftx.sh
     shifty.sh
+    altogether.sh
   )
 
 foreach(_script ${Prt_SCRIPTS})

@@ -55,8 +55,8 @@ PrtDetectorConstruction::PrtDetectorConstruction(G4double fRotationZ, G4double f
   fTest3 = fRun->getTest3();
 
   this->fRotationZ = fRotationZ;
-  this->fMisalignX = fMisalignX;
-  this->fMisalignY = fMisalignY;
+  this->fMisalignX = fMisalignX * mm;
+  this->fMisalignY = fMisalignY * mm;
 
   fNRow = 6;
   fNCol = 4;
