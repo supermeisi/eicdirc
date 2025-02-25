@@ -344,7 +344,7 @@ G4VPhysicalVolume *PrtDetectorConstruction::Construct() {
           lGlueE, "wGlue", lDirc, false, id);
     }
 
-    for (int i = 0; i < fNBar; i++) {
+    for (int i = 5; i < 6; i++) {
       double shifty = i * (fBar[1] + fBarsGap) - 0.5 * fBoxWidth + fBar[1] / 2.;
       for (int j = 0; j < nparts; j++) {
         double z =
